@@ -1,4 +1,5 @@
-const Course = require('../models/Course');
+const Movie = require('../models/Movie');
+const { multipleMongooseToObject } = require('../../util/mongoose');
 
 class SiteController {
     index(req, res, next) {
@@ -12,10 +13,11 @@ class SiteController {
         // })
         // res.render('home');
 
-        Course.find({})
-            .then((courses) => {
-                courses = courses.map((course) => course.toObject());
-                res.render('home', { courses });
+        Movie.find({})
+            .then((movies) => {
+                res.render('home', {
+                    movies: multipleMongooseToObject(movies),
+                });
             })
             .catch(next);
     }

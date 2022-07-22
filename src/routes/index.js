@@ -1,8 +1,10 @@
 const newsRouter = require('./news');
 const siteRouter = require('./site');
+const movieRouter = require('./movies');
 
 function route(app) {
-    app.get('/news', newsRouter);
+    app.use('/news', newsRouter);
+    app.use('/movies', movieRouter);
     app.use('/', siteRouter);
 }
 
