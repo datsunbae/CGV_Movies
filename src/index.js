@@ -5,6 +5,10 @@ const { engine } = require('express-handlebars');
 const app = express();
 const port = 3000;
 
+//Body Parser
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+
 const route = require('./routes');
 const database = require('./config/db/index');
 //Connect database
