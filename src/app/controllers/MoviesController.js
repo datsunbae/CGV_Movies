@@ -1,8 +1,11 @@
 const Movie = require('../models/Movie');
-const { mongooseToObject } = require('../../util/mongoose');
+const {
+    mongooseToObject,
+    multipleMongooseToObject,
+} = require('../../util/mongoose');
 
 class MoviesController {
-    // [GET] /movies/...
+    // [GET] /movies/:slug
     index(req, res, next) {
         Movie.findOne({ slug: req.params.slug })
             .then((movie) => {
@@ -13,6 +16,17 @@ class MoviesController {
                 } else {
                     res.render('404');
                 }
+            })
+            .catch(next);
+    }
+
+    // [GET] /movies/
+    listmovies(req, res, next) {
+        Movie.find({})
+            .then((movies) => {
+                res.render('movies/listmovies', {
+                    movies: multipleMongooseToObject(movies),
+                });
             })
             .catch(next);
     }
@@ -31,6 +45,20 @@ class MoviesController {
             .save()
             .then(() => res.redirect('/'))
             .catch((error) => {});
+    }
+
+    // [GET] /movies/:id/edit
+    edit(req, res, next) {
+        Movie.findById(req.params.id)
+            .then((movie) =>
+                res.render('movies/edit', { movie: mongooseToObject(movie) }),
+            )
+            .catch(next);
+    }
+
+    // [PUT] /movies/:id
+    update(req, res, next) {
+        Movie.updateOne(req.body).then(res.redirect('/movies/')).catch(next);
     }
 }
 

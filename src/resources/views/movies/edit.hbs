@@ -1,0 +1,18 @@
+<div class="mt-4">
+    <h3>EDIT MOVIES</h3>
+    <form method="POST" action="/movies/{{movie._id}}?_method=PUT">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" value="{{movie.name}}" name="name" placeholder="Enter name movies">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" placeholder="Enter description movies">{{movie.description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="videoId">Video ID</label>
+            <input type="text" class="form-control" id="videoId" value="{{movie.videoId}}" name="videoId" placeholder="Enter videoID movies">
+        </div>
+        <button type="submit" class="btn btn-primary">SAVE</button>
+    </form>
+</div>
