@@ -7,6 +7,7 @@ router.get('/', moviesController.listmovies);
 router.get('/create', moviesController.create);
 router.post('/store', moviesController.store);
 router.put('/:id', moviesController.update);
+router.delete('/:id/delete', moviesController.delete);
 router.get('/:id/edit', moviesController.edit);
 router.get('/:slug', moviesController.index);
 

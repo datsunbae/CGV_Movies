@@ -22,7 +22,7 @@
         </a>
       </td> 
       <td>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-danger" data-id="{{this._id}}" data-toggle="modal" data-target="#delete-movie">Delete</button>
       </td>
     </tr>
     {{/each}}
@@ -30,3 +30,46 @@
 </table>
 </div>
 </div>
+
+{{!-- Cofirm delete modal --}}
+<div id="delete-movie" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete movie?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>You want to delete the movie?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger btn-delete-movie" type="button" >Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Form Delete --}}
+<form name="form-delete-movie" method="POST"></form>
+
+<script>
+    //DOMContentLoaded: After the DOM finished loading do it
+    document.addEventListener("DOMContentLoaded", function() {
+        var idMovie;
+        var btnDeleteMovie = document.querySelector('.btn-delete-movie');
+        var formDeleteMovie = document.forms['form-delete-movie'];
+
+        $('#delete-movie').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          idMovie = button.data('id') // Extract info from data-* attributes
+        })
+
+        btnDeleteMovie.onclick = function(){
+            formDeleteMovie.action = '/movies/' + idMovie + '/delete/?_method=DELETE';
+            formDeleteMovie.submit();
+        }
+    })
+</script>

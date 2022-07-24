@@ -60,6 +60,13 @@ class MoviesController {
     update(req, res, next) {
         Movie.updateOne(req.body).then(res.redirect('/movies/')).catch(next);
     }
+
+    // [DELETE] /movies/:id/delete
+    delete(req, res, next) {
+        Movie.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
 }
 
 module.exports = new MoviesController();
