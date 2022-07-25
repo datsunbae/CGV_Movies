@@ -1,7 +1,7 @@
 <div class="container">
   <div class="mt-4">
-    <h3>LIST MOVIES</h3>
-    <a href="/movies/trash">Trash</a>
+    <h3>TRASH</h3>
+    <a href="/movies/">List Movies</a>
     <table class="table mt-2">
       <thead>
         <tr>
@@ -19,19 +19,16 @@
           <td>{{this.name}}</td>
           <td>{{this.description}}</td>
           <td>
-            <a href="/movies/{{this._id}}/edit">
-                <button type="button" class="btn btn-primary">Update</button>
-            </a>
+            <button type="button" class="btn btn-primary btn-restore-movie" data-id="{{this._id}}">Restore</button>
           </td> 
           <td>
-            <button type="button" class="btn btn-danger" data-id="{{this._id}}" data-toggle="modal" data-target="#delete-movie">Delete</button>
+            <button type="button" class="btn btn-danger" data-id="{{this._id}}" data-toggle="modal" data-target="#delete-movie">Permanently Deleted</button>
           </td>
         </tr>
         {{else}}
         <tr>
             <td colspan="4" class="text-center">
-                List Movies Empty.
-                <a href="/movies/create">Add movie</a>
+                Trash empty.
             </td>
         </tr>
         {{/each}}
@@ -61,8 +58,9 @@
   </div>
 </div>
 
-{{!-- Form Delete --}}
+{{!-- Form Hiden--}}
 <form name="form-delete-movie" method="POST"></form>
+<form name="form-restore-movie" method="POST"></form>
 
 <script>
     //DOMContentLoaded: After the DOM finished loading do it
@@ -70,15 +68,26 @@
         var idMovie;
         var btnDeleteMovie = document.querySelector('.btn-delete-movie');
         var formDeleteMovie = document.forms['form-delete-movie'];
+        var formRestoreMovie = document.forms['form-restore-movie'];
+        var btnRestoreMovie = $('.btn-restore-movie');
 
         $('#delete-movie').on('show.bs.modal', function (event) {
           var button = $(event.relatedTarget) // Button that triggered the modal
           idMovie = button.data('id') // Extract info from data-* attributes
         })
 
+        //Permanently Deleted
         btnDeleteMovie.onclick = function(){
-            formDeleteMovie.action = '/movies/' + idMovie + '/delete/?_method=DELETE';
+            formDeleteMovie.action = '/movies/' + idMovie + '/permanentlydelete/?_method=DELETE';
             formDeleteMovie.submit();
         }
+
+        //Restore Movie
+        btnRestoreMovie.click(function(e){
+            e.preventDefault();
+            var movieId = $(this).data('id')
+            formRestoreMovie.action = '/movies/' + movieId + '/restore/?_method=PATCH';
+            formRestoreMovie.submit();
+        })
     })
 </script>

@@ -58,13 +58,37 @@ class MoviesController {
 
     // [PUT] /movies/:id
     update(req, res, next) {
-        Movie.updateOne(req.body).then(res.redirect('/movies/')).catch(next);
+        Movie.updateOne({ _id: req.params.id }, req.body)
+            .then(res.redirect('/movies/'))
+            .catch(next);
     }
 
     // [DELETE] /movies/:id/delete
     delete(req, res, next) {
+        Movie.delete({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
+
+    permanentlyDelete(req, res, next) {
         Movie.deleteOne({ _id: req.params.id })
             .then(() => res.redirect('back'))
+            .catch(next);
+    }
+
+    trash(req, res, next) {
+        Movie.findDeleted({})
+            .then((movies) =>
+                res.render('movies/trash', {
+                    movies: multipleMongooseToObject(movies),
+                }),
+            )
+            .catch(next);
+    }
+
+    restore(req, res, next) {
+        Movie.restore({ _id: req.params.id })
+            .then((movies) => res.redirect('back'))
             .catch(next);
     }
 }
