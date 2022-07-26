@@ -22,9 +22,10 @@ class MoviesController {
 
     // [GET] /movies/
     listmovies(req, res, next) {
-        Movie.find({})
-            .then((movies) => {
+        Promise.all([Movie.find({}), Movie.countDocumentsDeleted()])
+            .then(([movies, countDelete]) => {
                 res.render('movies/listmovies', {
+                    countDelete,
                     movies: multipleMongooseToObject(movies),
                 });
             })
@@ -58,7 +59,7 @@ class MoviesController {
 
     // [PUT] /movies/:id
     update(req, res, next) {
-        Movie.updateOne({ _id: req.params.id }, req.body)
+        Movie.updateOneWithDeleted({ _id: req.params.id }, req.body)
             .then(res.redirect('/movies/'))
             .catch(next);
     }
@@ -90,6 +91,28 @@ class MoviesController {
         Movie.restore({ _id: req.params.id })
             .then((movies) => res.redirect('back'))
             .catch(next);
+    }
+
+    submitFormHandles(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                Movie.delete({ _id: req.body.filmId })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+            case 'permanentlydelete':
+                Movie.deleteOne({ _id: req.body.filmId })
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+                break;
+            case 'restore':
+                Movie.restore({ _id: req.body.filmId })
+                    .then((movies) => res.redirect('back'))
+                    .catch(next);
+                break;
+            default:
+                res.json('Datsunbae');
+        }
     }
 }
 

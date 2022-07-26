@@ -3,3 +3,7 @@ h1 {
 
 .card-item-movie {
   height: 450px; }
+
+.form-choose-handles {
+  width: 200px;
+  margin: 0 16px; }

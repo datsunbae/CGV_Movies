@@ -17,6 +17,6 @@ const Movie = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Movie.plugin(mongooseDelete, { deletedAt: true, overrideMethods: ['find'] }); // Override all methods
+Movie.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' }); // Override all methods
 
 module.exports = mongoose.model('Movie', Movie);
