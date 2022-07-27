@@ -22,7 +22,15 @@ class MoviesController {
 
     // [GET] /movies/
     listmovies(req, res, next) {
-        Promise.all([Movie.find({}), Movie.countDocumentsDeleted()])
+        let movieQuery = Movie.find({});
+        //Sort
+        if (req.query.hasOwnProperty('_sort')) {
+            movieQuery = movieQuery.sort({
+                [req.query.column]: req.query.type,
+            });
+        }
+
+        Promise.all([movieQuery, Movie.countDocumentsDeleted()])
             .then(([movies, countDelete]) => {
                 res.render('movies/listmovies', {
                     countDelete,

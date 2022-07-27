@@ -6,6 +6,8 @@ const { engine } = require('express-handlebars');
 const app = express();
 const port = 3000;
 
+const sortMiddleware = require('./app/middlewares/SortMiddleWare');
+
 //Body Parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,6 +26,9 @@ app.use(morgan('combined'));
 // Method Override
 app.use(methodOverride('_method'));
 
+//Custom Middlewares
+app.use(sortMiddleware);
+
 // Template Engine
 app.engine(
     'hbs',
@@ -32,6 +37,27 @@ app.engine(
         helpers: {
             sum(a, b) {
                 return a + b;
+            },
+            sort(fieldName, sort) {
+                const sortType =
+                    fieldName === sort.column ? sort.type : 'default';
+                const icons = {
+                    default: 'oi oi-elevator',
+                    asc: 'oi oi-sort-ascending',
+                    desc: 'oi oi-sort-descending',
+                };
+                const types = {
+                    default: 'desc',
+                    desc: 'asc',
+                    asc: 'desc',
+                };
+
+                const icon = icons[sortType];
+                const type = types[sortType];
+                console.log(type);
+                return `<a href="?_sort&column=${fieldName}&type=${type}">
+                <span class="${icon}"></span>
+                </a>`;
             },
         },
     }),
