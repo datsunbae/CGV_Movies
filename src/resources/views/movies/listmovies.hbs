@@ -20,14 +20,16 @@
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">#</th>
+          <th scope="col" style="display: flex">
+            ID
+            {{{sort '_id' _sort}}}
+          </th>
           <th scope="col">
             Name
             {{{sort 'name' _sort}}}
           </th>
           <th scope="col">
-            Description
-            
+            Description 
           </th>
           <th scope="col">Handle</th>
           <th scope="col"></th>
@@ -41,7 +43,7 @@
               <input class="form-check-input" type="checkbox" name="filmId" value="{{this._id}}">
             </div>
           </td>
-          <th scope="row">{{sum @index 1}}</th>
+          <td >{{this._id}}</td>
           <td>{{this.name}}</td>
           <td>{{this.description}}</td>
           <td>
